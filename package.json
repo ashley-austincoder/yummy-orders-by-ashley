@@ -1,0 +1,24 @@
+{
+  "name": "yumi-orders-by-ashley",
+  "version": "1.0.0",
+  "description": "Take home interview project for Yumi Engineering, by Ashley Smith",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashley-austincoder/yumi-orders-by-ashley.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ashley-austincoder/yumi-orders-by-ashley/issues"
+  },
+  "homepage": "https://github.com/ashley-austincoder/yumi-orders-by-ashley#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
