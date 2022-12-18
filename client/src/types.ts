@@ -6,7 +6,7 @@ export type Meal = {
     imageUrl: string;
 }
 
-export type Order = {
+export type YumiOrder = {
     id: number;
     delivery_date: string;
     meal_count: number;
