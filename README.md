@@ -7,7 +7,8 @@ This is a React + Node.js app backed by a MySQL database seeded with the initial
 Instructions to Run Project
 ------------
 
-1. `git clone`
+1. `git clone` project
+2. Ensure you have Node 12+ installed (I used v16.18.1 for development, believe 12+ has requirements for modules but use this version if needed)
 1. `npm install` in root to install dependencies
 2. `npm start` in root to start node.js server
 3. In another terminal, `cd client` from root, then run `npm install` and `npm start` to start React application
