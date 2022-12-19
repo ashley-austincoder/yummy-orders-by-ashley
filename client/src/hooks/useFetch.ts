@@ -3,7 +3,7 @@
  * I knew I wanted to use a hook that would cache the API response and return the loading/error/data states,
  * and for time's sake did not reinvent the wheel
  */
-import { useEffect, useReducer, useRef } from "react";
+import { useEffect, useReducer, useRef } from 'react';
 
 interface State<T> {
   data?: T;
@@ -14,9 +14,9 @@ interface State<T> {
 type Cache<T> = { [url: string]: T };
 
 type Action<T> =
-  | { type: "loading" }
-  | { type: "fetched"; payload: T }
-  | { type: "error"; payload: Error };
+  | { type: 'loading' }
+  | { type: 'fetched'; payload: T }
+  | { type: 'error'; payload: Error };
 
 function useFetch<T = unknown>(url?: string, options?: RequestInit): State<T> {
   const cache = useRef<Cache<T>>({});
@@ -33,11 +33,11 @@ function useFetch<T = unknown>(url?: string, options?: RequestInit): State<T> {
   // Keep state logic separated
   const fetchReducer = (state: State<T>, action: Action<T>): State<T> => {
     switch (action.type) {
-      case "loading":
+      case 'loading':
         return { ...initialState, loading: true };
-      case "fetched":
+      case 'fetched':
         return { ...initialState, data: action.payload, loading: false };
-      case "error":
+      case 'error':
         return { ...initialState, error: action.payload, loading: false };
       default:
         return state;
@@ -53,11 +53,11 @@ function useFetch<T = unknown>(url?: string, options?: RequestInit): State<T> {
     cancelRequest.current = false;
 
     const fetchData = async () => {
-      dispatch({ type: "loading" });
+      dispatch({ type: 'loading' });
 
       // If a cache exists for this url, return it
       if (cache.current[url]) {
-        dispatch({ type: "fetched", payload: cache.current[url] });
+        dispatch({ type: 'fetched', payload: cache.current[url] });
         return;
       }
 
@@ -71,11 +71,11 @@ function useFetch<T = unknown>(url?: string, options?: RequestInit): State<T> {
         cache.current[url] = data;
         if (cancelRequest.current) return;
 
-        dispatch({ type: "fetched", payload: data });
+        dispatch({ type: 'fetched', payload: data });
       } catch (error) {
         if (cancelRequest.current) return;
 
-        dispatch({ type: "error", payload: error as Error });
+        dispatch({ type: 'error', payload: error as Error });
       }
     };
 
