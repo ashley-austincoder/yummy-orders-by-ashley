@@ -17,6 +17,9 @@ Instructions to Run Project
 6. Try adding another user_id, both a number and a random string and see how the app responds to unknown users
 7. Filter the results for a user with a `delivery_date` query parameter: `http://localhost:3000/?user_id=2&delivery_date=2018-06-01`
 
+**Note**
+Steps 5 onwards above require a local database connection, unfortunately there is not a remote database available for connecting at this time
+
 Instructions to Run Tests
 ------------
 1. Navigate to the project root

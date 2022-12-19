@@ -6,7 +6,7 @@ interface SortDirectionProps {
 }
 export const ChangeSortDirection = (props: SortDirectionProps): JSX.Element => {
     const { direction, setDirection } = props;
-    const buttonTxt = `Sort orders ${direction === 'asc' ? 'oldest to newest' : 'newest to oldest'}`
+    const buttonTxt = `Sort orders ${direction === 'asc' ? 'newest to oldest' : 'oldest to newest'}`
     
     const handleSortChange = () => {
         setDirection(direction === 'asc' ? 'desc' : 'asc');

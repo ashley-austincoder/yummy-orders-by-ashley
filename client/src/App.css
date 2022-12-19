@@ -16,7 +16,7 @@ body {
 }
 
 .container {
-  width: 700px;
+  width: 600px;
   margin: 16px auto;
   background-color: var(--white);
   padding: 0 16px 16px;

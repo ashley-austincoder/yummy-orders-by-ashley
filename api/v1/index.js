@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config({path: '../.env'});
 import express from 'express';
 import runSqlQuery from './services/query.js';
 import statusCodes from './utils/http.js';
@@ -14,7 +16,6 @@ import {
 } from './utils/sqlGenerator.js';
 
 const PORT = process.env.PORT || 3001;
-
 const app = express();
 
 app.get('/api/v1/orders', async (req, res) => {
@@ -79,7 +80,9 @@ app.get('/api/v1/orders/getTotalCount', async (req, res) => {
 app.get('/api/v1/users', async (req, res) => {
   const { user_id } = req.query;
   if (!user_id) {
-    res.status(statusCodes.BAD_REQUEST).json({ errors: ['User Id is Required'] });
+    res
+      .status(statusCodes.BAD_REQUEST)
+      .json({ errors: ['User Id is Required'] });
   }
   const sql = `SELECT * FROM USERS WHERE ID = ${user_id} LIMIT 1`;
 
