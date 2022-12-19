@@ -25,3 +25,8 @@ select {
     background-color: var(--purpleLight);
     padding: 8px;
 }
+
+.total-orders {
+    float: right;
+    color: var(--purpleExtraDark)
+}

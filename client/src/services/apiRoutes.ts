@@ -14,5 +14,3 @@ export const getUserOrdersRoute = (
 export const getOrderCountRoute = (userID: string): string =>
   `/api/v1/orders/getTotalCount?user_id=${userID}`;
 
-export const getAllDeliveryDatesRoute = (userID: string): string =>
-  `/api/v1/orders/getAllDeliveryDates?user_id=${userID}`;

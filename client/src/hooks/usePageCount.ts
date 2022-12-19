@@ -1,7 +1,7 @@
 import { getOrderCountRoute } from '../services/apiRoutes';
 import useFetch from './useFetch';
 
-const usePages = (userID: string, ordersPerPage: number): number[] => {
+const useTotalAndPages = (userID: string, ordersPerPage: number): {pages: number[], totalOrders: number } => {
   const getTotalOrdersUrl = getOrderCountRoute(userID);
   const { data: countObject } = useFetch<any>(getTotalOrdersUrl);
   const orderCount =
@@ -13,7 +13,7 @@ const usePages = (userID: string, ordersPerPage: number): number[] => {
   for (let i = 0; i < pageCount; i++) {
     pagesArray.push(i + 1);
   }
-  return pagesArray;
+  return { pages: pagesArray, totalOrders: orderCount };
 };
 
-export default usePages;
+export default useTotalAndPages;

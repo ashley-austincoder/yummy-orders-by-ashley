@@ -76,7 +76,7 @@ export const compileOrderInfo = (mealsWithOrderInfo) => {
       // order is not tracked yet, start with provided meal information
       orderMap.set(order_id, {
         id: order_id,
-        delivery_date,
+        delivery_date: new Date(delivery_date).toISOString().split('T')[0],
         meal_count: quantity,
         meals: [meal],
       });

@@ -17,7 +17,7 @@ const App = (): JSX.Element => {
   return (
     <div className="App">
       <header>
-        <h1>Yumi Orders {username ? `for ${username}` : ""}</h1>
+        <h1>Yummy Orders {username ? `for ${username}` : ""}</h1>
         <p>An interview project by Ashley Smith</p>
       </header>
       <main>

@@ -1,4 +1,5 @@
-import usePages from '../../hooks/usePageCount';
+import { useEffect } from 'react';
+import useTotalAndPages from '../../hooks/usePageCount';
 
 interface OrdersPaginationProps {
   userID: string;
@@ -7,15 +8,27 @@ interface OrdersPaginationProps {
   ordersPerPage: number;
   setOrdersPerPage: (per: number) => void;
   setPage: (page: number) => void;
+  setTotalOrders: (total: number) => void;
 }
 
 export const OrdersPagination = (
   props: OrdersPaginationProps
 ): JSX.Element | null => {
-  const { userID, disabled, page, ordersPerPage, setOrdersPerPage, setPage } =
-    props;
+  const {
+    userID,
+    disabled,
+    page,
+    ordersPerPage,
+    setOrdersPerPage,
+    setPage,
+    setTotalOrders,
+  } = props;
 
-  const pages = usePages(userID, ordersPerPage);
+  const { pages, totalOrders } = useTotalAndPages(userID, ordersPerPage);
+
+  useEffect(() => {
+    setTotalOrders(totalOrders);
+  }, [totalOrders]);
 
   const handleOrdersPerPageChange = (e: any) => {
     setOrdersPerPage(Number(e.target.value));

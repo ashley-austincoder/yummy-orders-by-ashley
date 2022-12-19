@@ -49,7 +49,7 @@ app.get('/api/v1/orders', async (req, res) => {
       .sort(sortByDeliveryDateFn)
       .slice(sliceStart, sliceEnd);
 
-    res.status(statusCodes.OK).json(orders);
+    res.status(statusCodes.OK).json({ orders });
   } catch {
     res
       .status(statusCodes.INTERNAL_SERVER_ERROR)

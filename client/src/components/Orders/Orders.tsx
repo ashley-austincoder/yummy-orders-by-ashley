@@ -18,8 +18,8 @@ const Orders = (props: OrdersProps): JSX.Element | null => {
   const [page, setPage] = useState<number>(1);
   const [direction, setDirection] = useState<'asc' | 'desc'>('asc');
   const [totalOrders, setTotalOrders] = useState<number | null>(null);
-  const [deliveryDate] = useQueryParam('delivery_date', '');
 
+  const [deliveryDate] = useQueryParam('delivery_date', '');
   const ordersApiUrl = getUserOrdersRoute(
     userID,
     ordersPerPage,
@@ -27,7 +27,9 @@ const Orders = (props: OrdersProps): JSX.Element | null => {
     direction,
     deliveryDate
   );
-  const { data: orders } = useFetch<YumiOrder[]>(ordersApiUrl);
+  const { data } = useFetch<{ orders: YumiOrder[] }>(ordersApiUrl);
+  const orders = data && data.orders;
+
   return (
     <div className='container'>
       <OrdersPagination
@@ -37,37 +39,40 @@ const Orders = (props: OrdersProps): JSX.Element | null => {
         ordersPerPage={ordersPerPage}
         setOrdersPerPage={setOrdersPerPage}
         setPage={setPage}
+        setTotalOrders={setTotalOrders}
       />
       <ChangeSortDirection direction={direction} setDirection={setDirection} />
-      {(orders || []).map((order) => {
-        const { id, delivery_date, meal_count, meals } = order;
-        return (
-          <div className='order' key={id}>
-            <div className='key-info'>
-              <p>
-                <span className='highlight'>Delivery Date:</span>{' '}
-                {new Date(delivery_date).toLocaleDateString()}
-              </p>
-              <p>
-                <span className='highlight'>Meal Count:</span>
-                {meal_count}
-              </p>
+      <p className='total-orders'>{totalOrders} Total Orders</p>
+      {orders &&
+        orders.map((order) => {
+          const { id, delivery_date, meal_count, meals } = order;
+          return (
+            <div className='order' key={id}>
+              <div className='key-info'>
+                <p>
+                  <span className='highlight'>Delivery Date:</span>{' '}
+                  {delivery_date}
+                </p>
+                <p>
+                  <span className='highlight'>Meal Count:</span>
+                  {meal_count}
+                </p>
+              </div>
+              <div>
+                {meals.map((meal) => (
+                  <div key={meal.id}>
+                    <Meal
+                      quantity={meal.quantity}
+                      name={meal.name}
+                      description={meal.description}
+                      imageUrl={meal.image_url}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-            <div>
-              {meals.map((meal) => (
-                <div key={meal.id}>
-                  <Meal
-                    quantity={meal.quantity}
-                    name={meal.name}
-                    description={meal.description}
-                    imageUrl={meal.image_url}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      })}
+          );
+        })}
     </div>
   );
 };
