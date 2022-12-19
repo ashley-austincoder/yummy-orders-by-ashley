@@ -3,7 +3,7 @@ export type Meal = {
     quantity: number;
     name: string;
     description: string;
-    imageUrl: string;
+    image_url: string;
 }
 
 export type YumiOrder = {

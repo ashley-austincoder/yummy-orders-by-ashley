@@ -1,0 +1,16 @@
+.meal {
+    display: flex;
+    /* border: 1px solid var(--purpleLight); */
+    padding: 8px;
+    width: 300px;
+}
+
+.meal-name {
+    font-weight: bold;
+    color: var(--purpleDark)
+}
+ 
+.meal-img {
+    width: 60px;
+    margin-right: 8px;
+}

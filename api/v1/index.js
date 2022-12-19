@@ -1,57 +1,98 @@
-const express = require("express");
-const database = require('./services/db.js');
-const { statusCodes } = require("./utils/http.js");
-const { getOrdersStartAndEndIndex, getSortByDeliveryDateFn, compileOrderInfo, getSqlSelect_AllMealsAndOrdersForUserId } = require("./utils/orderUtils.js");
+import express from "express";
+import database from "./services/db.js";
+import runSqlQuery from "./services/query.js";
+import statusCodes from "./utils/http.js";
+import {
+  getOrdersStartAndEndIndex,
+  getSortByDeliveryDateFn,
+  compileOrderInfo,
+} from "./utils/orderUtils.js";
+
+import { getSql_AllMealsAndOrdersForUserId, getSql_OrderCount } from "./utils/sqlGenerator.js";
 
 const PORT = process.env.PORT || 3001;
 
 const app = express();
 
-app.get('/api/v1/orders', (req, res) => {
+app.get("/api/v1/orders", async (req, res) => {
   // check params and return error if required information is missing or incorrect
   const { user_id, delivery_date, per, page, sort, direction } = req.query;
   if (!user_id) {
-    res.status(statusCodes.HTTP_UNPROCESSABLE).errored('User Id is Required');
+    res.status(statusCodes.HTTP_UNPROCESSABLE).json("User Id is Required");
     return;
-  } 
+  }
   if (isNaN(Number(user_id))) {
-    res.status(statusCodes.BAD_REQUEST).errored('User Id is Invalid')
+    res.status(statusCodes.BAD_REQUEST).json("User Id is Invalid");
     return;
   }
-  const sqlSelectOrders = getSqlSelect_AllMealsAndOrdersForUserId(user_id, delivery_date);
-  if (!sqlSelectOrders) {
-    res.status(statusCodes.BAD_REQUEST).send('Not enough information to retrieve orders.')
-    return;
-  }
-  
-  // retrieve all order and meal information, then compile into expected data model, 
-  // sort and limit results to requested page / per page order count
-  database.query(sqlSelectOrders, (error, mealAndOrderInfo) => {
-    if (error) {
-      res.status(statusCodes.INTERNAL_SERVER_ERROR).errored(error);
-      return;
-    }
-    const [ sliceStart, sliceEnd ] = getOrdersStartAndEndIndex(per, page);
 
+  const sql = getSql_AllMealsAndOrdersForUserId(user_id, delivery_date);
+  if (!sql) {
+    res
+      .status(statusCodes.BAD_REQUEST)
+      .json("Not enough information to retrieve orders");
+    return;
+  }
+
+  try {
+    const orderAndMealInfo = await runSqlQuery(sql);
+    const [sliceStart, sliceEnd] = getOrdersStartAndEndIndex(per, page);
+
+    // note: ignoring the sort param, since delivery_date is the only sort option currently supported
     const sortByDeliveryDateFn = getSortByDeliveryDateFn(direction);
-  
-    const orders = compileOrderInfo(mealAndOrderInfo)
+
+    const orders = compileOrderInfo(orderAndMealInfo)
       .sort(sortByDeliveryDateFn)
       .slice(sliceStart, sliceEnd);
 
-    res.status(statusCodes.OK).send(orders);
-  });
+    res.status(statusCodes.OK).json(orders);
+  } catch {
+    res
+      .status(statusCodes.INTERNAL_SERVER_ERROR)
+      .json("Error retrieving orders");
+  }
 });
 
-app.get("/api/v1/users", (req, res) => {
-  database.query('SELECT * FROM USERS', (error, users) => {
-    if (error) {
-      res.status(statusCodes.INTERNAL_SERVER_ERROR).send('Error retrieving users');
-    }
-    res.status(statusCodes.OK).send(users);
-  })
-})
+app.get("/api/v1/orders/getTotalCount", async (req, res) => {
+  // check params and return error if required information is missing or incorrect
+  const { user_id } = req.query;
+  if (!user_id) {
+    res.status(statusCodes.HTTP_UNPROCESSABLE).json("User Id is Required");
+    return;
+  }
+  if (isNaN(Number(user_id))) {
+    res.status(statusCodes.BAD_REQUEST).json("User Id is Invalid");
+    return;
+  }
 
+  const sql = getSql_OrderCount(user_id);
+
+  try {
+    const ordersCount = await runSqlQuery(sql);
+    console.log('___ordersCOunt', ordersCount);
+    // note: ignoring the sort param, since delivery_date is the only sort option currently supported
+    
+    res.status(statusCodes.OK).json(ordersCount);
+  } catch {
+    res
+      .status(statusCodes.INTERNAL_SERVER_ERROR)
+      .json("Error retrieving orders");
+  }
+});
+
+app.get("/api/v1/users", async (req, res) => {
+  const { user_id } = req.query;
+  if (!user_id) {
+    res.status(statusCodes.BAD_REQUEST).json("User Id is Required");
+  }
+  const sql = `SELECT * FROM USERS WHERE ID = ${user_id} LIMIT 1`;
+  try {
+    const user = await runSqlQuery(sql);
+    res.status(statusCodes.OK).json(user);
+  } catch {
+    res.status(statusCodes.INTERNAL_SERVER_ERROR).json("Error retrieving user");
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

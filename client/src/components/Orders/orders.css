@@ -1,0 +1,17 @@
+.order {
+    display: flex;
+    background-color: var(--grey);
+    padding: 16px;
+    margin: 16px;
+}
+
+.key-info {
+    width: 350px;
+}
+.highlight {
+    color: var(--purpleDark)
+}
+
+select {
+    margin: 0 6px;
+}

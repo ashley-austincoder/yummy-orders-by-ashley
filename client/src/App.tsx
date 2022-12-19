@@ -1,27 +1,40 @@
-import { useState } from 'react';
-import { ErrorRetrievingData } from './components/ErrorRetrievingData';
-import Orders from './components/Orders';
-import ChooseUser from './components/ChooseUser';
-import { User } from './types';
-import './App.css'
+import { Error } from "./components/Error";
+import Orders from "./components/Orders/Orders";
+import { User } from "./types";
+import "./App.css";
+import useQueryParam from "./hooks/useQueryParam";
+import useFetch from "./hooks/useFetch";
+import { getUserInfoRoute } from "./services/apiRoutes";
 
 const App = (): JSX.Element => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [userID] = useQueryParam("user_id", "");
+
+  const route = userID && getUserInfoRoute(userID);
+
+  const { error, data: userData } = useFetch<User[]>(route);
+  const userNotFound = userData && !userData.length;
+  const username = userData && !!userData.length && userData[0].name;
   return (
     <div className="App">
       <header>
-        <h1>Yumi Orders</h1>
+        <h1>Yumi Orders {username ? `for ${username}` : ""}</h1>
         <p>An interview project by Ashley Smith</p>
       </header>
       <main>
-        <ChooseUser setCurrentUser={setCurrentUser} setErrorMessage={setErrorMessage}/>
-        {currentUser && !errorMessage && <Orders username={currentUser.name} userId={currentUser.id} setErrorMessage={setErrorMessage}/>}
-        {errorMessage && <ErrorRetrievingData message={errorMessage} />}
+        {!userNotFound && <Orders userID={userID} />}
+        {(error || userNotFound) && (
+          <Error
+            message={
+              userNotFound
+                ? "User not found"
+                : "Error retrieving user information"
+            }
+          />
+        )}
       </main>
       <footer></footer>
     </div>
   );
-}
+};
 
 export default App;

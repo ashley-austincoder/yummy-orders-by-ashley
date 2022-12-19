@@ -1,20 +1,16 @@
-var mysql = require('mysql');
+import mysql from 'mysql';
 
-var dbConnection = mysql.createConnection({
+const dbPool = mysql.createPool({
   host: "localhost",
   user: "root",
   password: "2dL3zYg9!X8E",
   database: 'Yumi'
 });
 
-dbConnection.connect(function(err) {
+dbPool.getConnection((err, connection) => {
   if (err) throw err;
   console.log("Database connected!");
+  connection.release();
 });
 
-// dbConnection.end((err) => {
-//   // The connection is terminated gracefully
-//   // Ensures all remaining queries are executed
-//   // Then sends a quit packet to the MySQL server.
-// });
-module.exports = dbConnection;
+export default dbPool;
