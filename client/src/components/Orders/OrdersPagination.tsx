@@ -28,7 +28,7 @@ export const OrdersPagination = (
 
   useEffect(() => {
     setTotalOrders(totalOrders);
-  }, [totalOrders]);
+  }, [setTotalOrders, totalOrders]);
 
   const handleOrdersPerPageChange = (e: any) => {
     setOrdersPerPage(Number(e.target.value));

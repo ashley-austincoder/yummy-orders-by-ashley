@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import useFetch from '../../hooks/useFetch';
 import { getUserOrdersRoute } from '../../services/apiRoutes';
 import { YumiOrder } from '../../types';
-import Meal from '../Meal/Meal';
 import { OrdersPagination } from './OrdersPagination';
 import './orders.css';
 import { ChangeSortDirection } from './ChangeSortDirection';
