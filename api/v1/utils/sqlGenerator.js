@@ -8,23 +8,22 @@
  * More data is requested from the database than will be returned to the user which is a performance cost,
  * however retrieving all required data in one SQL query was determined to be acceptable as it improves readability
  */
-export const getSql_AllMealsAndOrdersForUserId = (
-    userId,
-    deliveryDate
-  ) => {
-    const whereClause = `USER_ID = ${userId} ${
-      deliveryDate ? `AND DELIVERY_DATE = ${deliveryDate}` : ``
-    }`;
-    return `
+export const getSql_AllMealsAndOrdersForUserId = (userId, deliveryDate) => {
+  const whereClause = `USER_ID = ${userId} ${
+    deliveryDate ? `AND DELIVERY_DATE = ${deliveryDate}` : ``
+  }`;
+  return `
       SELECT * FROM ORDERS O
       INNER JOIN ORDER_ATTRIBUTES A ON O.ID = A.ORDER_ID 
       INNER JOIN MEALS M ON M.ID = A.MEAL_ID
       WHERE ${whereClause}
     `;
-  };
+};
 
-  export const getSql_OrderCount = (userId) => {
-    return `SELECT COUNT(ID) FROM ORDERS WHERE USER_ID = ${userId}`
-  }
+export const getSql_OrderCount = (userId) => {
+  return `SELECT COUNT(ID) FROM ORDERS WHERE USER_ID = ${userId}`;
+};
 
-  // export default getSql_AllMealsAndOrdersForUserId;
+export const getSql_AllDeliveryDates = (userId) => {
+  return `SELECT DELIVERY_DATE FROM ORDERS WHERE USER_ID = ${userId}`;
+};

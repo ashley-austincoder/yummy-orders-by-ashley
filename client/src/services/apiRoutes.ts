@@ -10,3 +10,5 @@ export const getUserOrdersRoute = (
 };
 
 export const getOrderCountRoute = (userId: string): string  => `/api/v1/orders/getTotalCount?user_id=${userId}`;
+
+export const getFilterByDeliveryDateRoute = (userId: string, deliveryDate: Date): string  => `/api/v1/orders/getTotalCount?user_id=${userId}&delivery_date=${deliveryDate}`;

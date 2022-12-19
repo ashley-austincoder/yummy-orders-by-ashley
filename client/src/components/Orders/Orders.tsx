@@ -5,6 +5,7 @@ import { YumiOrder } from "../../types";
 import Meal from "../Meal/Meal";
 import { OrdersPagination } from "./OrdersPagination";
 import "./orders.css";
+import { ChangeSortDirection } from "./ChangeSortDirection";
 
 interface OrdersProps {
   userID: string;
@@ -15,8 +16,6 @@ const Orders = (props: OrdersProps): JSX.Element | null => {
   const [ordersPerPage, setOrdersPerPage] = useState<number>(4);
   const [page, setPage] = useState<number>(1);
   const [direction, setDirection] = useState<"asc" | "desc">("asc");
-  console.log('___ordersPerPage', ordersPerPage)
-
 
   const ordersApiUrl = getUserOrdersRoute(
     userID,
@@ -24,7 +23,6 @@ const Orders = (props: OrdersProps): JSX.Element | null => {
     page,
     direction
   );
-  console.log('getUserOrdersRoute', ordersApiUrl)
   const { error, data: orders } = useFetch<YumiOrder[]>(ordersApiUrl);
 
   return (
@@ -33,11 +31,10 @@ const Orders = (props: OrdersProps): JSX.Element | null => {
         userID={userID}
         page={page}
         ordersPerPage={ordersPerPage}
-        direction={direction}
         setOrdersPerPage={setOrdersPerPage}
-        setDirection={setDirection}
         setPage={setPage}
       />
+      <ChangeSortDirection direction={direction} setDirection={setDirection}/>
       {(orders || []).map((order) => {
         const { id, delivery_date, meal_count, meals } = order;
         return (

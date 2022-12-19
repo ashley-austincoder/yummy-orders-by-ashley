@@ -6,7 +6,6 @@ const runSqlQuery = async (sql) => {
       if (error) {
         reject(error);
       } else {
-        console.log('result', result);
         resolve(result);
       }
     });

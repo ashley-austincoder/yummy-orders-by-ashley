@@ -15,3 +15,7 @@
 select {
     margin: 0 6px;
 }
+
+.page-select {
+    margin-left: 16px;
+}

@@ -1,14 +1,13 @@
 import useFetch from "../../hooks/useFetch";
+import usePages from "../../hooks/usePageCount";
 import { getOrderCountRoute } from "../../services/apiRoutes";
 
 interface OrdersPaginationProps {
   userID: string;
   page: number;
   ordersPerPage: number;
-  direction: "asc" | "desc";
   setOrdersPerPage: (per: number) => void;
   setPage: (page: number) => void;
-  setDirection: (direction: "asc" | "desc") => void;
 }
 
 export const OrdersPagination = (
@@ -18,28 +17,23 @@ export const OrdersPagination = (
     userID,
     page,
     ordersPerPage,
-    direction,
     setOrdersPerPage,
     setPage,
-    setDirection,
   } = props;
-  // const getTotalOrdersUrl = getOrderCountRoute(userID)
-  // const { error, data: totalOrders } = useFetch<string>(getTotalOrdersUrl);
-  // console.log('Total orders in UI', totalOrders);
-  // const pageCount = totalOrders ? Math.ceil(Number(totalOrders) / ordersPerPage) : 1;
-  // const showPaginationSelect = true; //ordersPerPage < totalOrders;
 
+  const pages = usePages(userID, ordersPerPage);
+  console.log("pages", pages);
   const handleOrdersPerPageChange = (e: any) => {
     setOrdersPerPage(Number(e.target.value));
   };
-  // const handlePageChange = (e: any) => {
-  //   setPage(Number(e.target.value));
-  // }
-  // console.log('totalOrders > ordersPerPage', totalOrders, ordersPerPage)
+
+  const handlePageChange = (e: any) => {
+    setPage(Number(e.target.value));
+  };
+
   return (
     <div>
       <form>
-        <div>
         <label>
           Viewing
           <select value={ordersPerPage} onChange={handleOrdersPerPageChange}>
@@ -48,30 +42,23 @@ export const OrdersPagination = (
             <option value="4">4</option>
             <option value="6">6</option>
           </select>
-          {`Order${ordersPerPage > 1 ? 's' : ''}`} per page
+          {`Order${ordersPerPage > 1 ? "s" : ""}`} per page
         </label>
-        </div>
+        {pages.length > 1 && (
+          <label className="page-select">
+            Page
+            <select value={page} onChange={handlePageChange}>
+              {pages.map((pageNum) => {
+                return (
+                  <option value={pageNum.toString()}>
+                    {pageNum.toString()}
+                  </option>
+                );
+              })}
+            </select>
+          </label>
+        )}
       </form>
     </div>
   );
 };
-
-
-/**
- * <div>
-        {showPaginationSelect && <label>
-          Page
-          <select value={page} onChange={handlePageChange}>
-            {new Array(pageCount).map((_, index) => {
-              return <option value={`${index + 1}`}>{index + 1}</option>
-            })}
-            
-            {/* <option value="2">2</option>
-            <option value="4">4</option>
-            <option value="6">6</option> 
-            </select>
-            </label>
-          
-          }
-          </div>
- */

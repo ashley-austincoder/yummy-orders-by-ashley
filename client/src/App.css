@@ -45,6 +45,14 @@ footer {
   height: 25px;
 }
 
+button {
+  background-color: var(--purpleDark);
+  color: white;
+  padding: 8px;
+  border: none;
+  margin: 8px 0;
+}
+
 .center {
   text-align: center;
 }
