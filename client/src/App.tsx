@@ -13,15 +13,15 @@ const App = (): JSX.Element => {
 
   const { error, data: userData } = useFetch<User[]>(route);
   const userNotFound = userData && !userData.length;
-  const username = userData && !!userData.length && userData[0].name;
+  const username = userData && userData[0].name;
   return (
     <div className="App">
       <header>
-        <h1>Yummy Orders {username ? `for ${username}` : ""}</h1>
+        <h1>Yummy Orders</h1>
         <p>An interview project by Ashley Smith</p>
       </header>
       <main>
-        {!userNotFound && <Orders userID={userID} />}
+        {!userNotFound && <Orders userID={userID} username={username}/>}
         {(error || userNotFound) && (
           <Error
             message={

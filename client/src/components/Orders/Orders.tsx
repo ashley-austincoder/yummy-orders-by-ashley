@@ -7,13 +7,15 @@ import { OrdersPagination } from './OrdersPagination';
 import './orders.css';
 import { ChangeSortDirection } from './ChangeSortDirection';
 import useQueryParam from '../../hooks/useQueryParam';
+import Order from './Order';
 
 interface OrdersProps {
   userID: string;
+  username?: string;
 }
 
 const Orders = (props: OrdersProps): JSX.Element | null => {
-  const { userID } = props;
+  const { userID, username } = props;
   const [ordersPerPage, setOrdersPerPage] = useState<number>(4);
   const [page, setPage] = useState<number>(1);
   const [direction, setDirection] = useState<'asc' | 'desc'>('asc');
@@ -29,7 +31,7 @@ const Orders = (props: OrdersProps): JSX.Element | null => {
   );
   const { data } = useFetch<{ orders: YumiOrder[] }>(ordersApiUrl);
   const orders = data && data.orders;
-
+  const ordersShown = totalOrders ? Math.min(totalOrders, ordersPerPage) : null;
   return (
     <div className='container'>
       <OrdersPagination
@@ -42,34 +44,20 @@ const Orders = (props: OrdersProps): JSX.Element | null => {
         setTotalOrders={setTotalOrders}
       />
       <ChangeSortDirection direction={direction} setDirection={setDirection} />
-      <p className='total-orders'>{totalOrders} Total Orders</p>
+      {totalOrders && !deliveryDate && <p className='total-orders'>Showing {ordersShown} of {totalOrders} Orders</p>}
+      <hr/>
+      {username && <h2>{username}'s Orders</h2>}
       {orders &&
         orders.map((order) => {
           const { id, delivery_date, meal_count, meals } = order;
           return (
-            <div className='order' key={id}>
-              <div className='key-info'>
-                <p>
-                  <span className='highlight'>Delivery Date:</span>{' '}
-                  {delivery_date}
-                </p>
-                <p>
-                  <span className='highlight'>Meal Count:</span>
-                  {meal_count}
-                </p>
-              </div>
-              <div>
-                {meals.map((meal) => (
-                  <div key={meal.id}>
-                    <Meal
-                      quantity={meal.quantity}
-                      name={meal.name}
-                      description={meal.description}
-                      imageUrl={meal.image_url}
-                    />
-                  </div>
-                ))}
-              </div>
+            <div key={id}>
+              <Order
+                id={id}
+                deliveryDate={delivery_date}
+                mealCount={meal_count}
+                meals={meals}
+              />
             </div>
           );
         })}

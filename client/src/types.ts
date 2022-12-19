@@ -1,4 +1,4 @@
-export type Meal = {
+export type MealInfo = {
     id: number;
     quantity: number;
     name: string;
@@ -10,7 +10,7 @@ export type YumiOrder = {
     id: number;
     delivery_date: string;
     meal_count: number;
-    meals: Meal[]
+    meals: MealInfo[]
 }
 
 export type User = {

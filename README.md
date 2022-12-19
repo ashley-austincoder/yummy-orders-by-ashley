@@ -1,14 +1,13 @@
 # yummy-orders-by-ashley
 Take home interview project for Yumi Engineering, by Ashley Smith
 
-----------------------
-
-This is a React + Node.js app backed by a MySQL database seeded with the initial project sql.dump file. It retrieves orders for a user based on the user_id provided as a query parameter (this is assuming the user authenticated and logged in already), and displays them to the user. The UI provides pagination and sort functionality, and a delivery_date filter is supported via query parameter.
+This is a React + Node.js app backed by a MySQL database seeded with the initial project sql.dump file. It retrieves orders for a user based on the `user_id` provided as a query parameter (this is assuming the user authenticated and logged in already), and displays them to the user. The UI provides pagination and sort functionality, and a `delivery_date` filter is supported via query parameter.
 
 
 Instructions to Run Project
 ------------
 
+1. `git clone`
 1. `npm install` in root to install dependencies
 2. `npm start` in root to start node.js server
 3. In another terminal, `cd client` from root, then run `npm install` and `npm start` to start React application

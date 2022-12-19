@@ -45,8 +45,12 @@ footer {
   height: 25px;
 }
 
+h2 {
+  color: var(--purpleDark)
+}
+
 button {
-  background-color: var(--purpleDark);
+  background-color: var(--purpleExtraDark);
   color: white;
   padding: 8px;
   border: none;
