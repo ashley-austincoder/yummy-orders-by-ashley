@@ -91,3 +91,14 @@ export const compileOrderInfo = (mealsWithOrderInfo) => {
   // turn map of orders into an array
   return Array.from(orderMap, ([, value]) => value);
 };
+
+export const normalizeDeliveryDate = deliveryDate => {
+  const decoded = decodeURI(deliveryDate);
+  const isDateString = !isNaN(Date.parse(decoded));
+  if (!isDateString) {
+    return null;
+  }
+  const midnightDate = new Date(deliveryDate)
+  midnightDate.setUTCHours(0,0,0,0);
+  return midnightDate.toISOString();
+}
