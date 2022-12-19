@@ -13,9 +13,15 @@
 }
 
 select {
-    margin: 0 6px;
+    margin: 6px;
 }
 
 .page-select {
-    margin-left: 16px;
+    margin: 0 16px;
+}
+
+.pagination-container {
+    width: 100%;
+    background-color: var(--purpleLight);
+    padding: 8px;
 }

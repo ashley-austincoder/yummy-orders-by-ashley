@@ -9,8 +9,11 @@
  * however retrieving all required data in one SQL query was determined to be acceptable as it improves readability
  */
 export const getSql_AllMealsAndOrdersForUserId = (userId, deliveryDate) => {
+  const formattedDeliveryDate = deliveryDate
+    ? new Date(deliveryDate).toISOString()
+    : null;
   const whereClause = `USER_ID = ${userId} ${
-    deliveryDate ? `AND DELIVERY_DATE = ${deliveryDate}` : ``
+    deliveryDate ? `AND DELIVERY_DATE = '${formattedDeliveryDate}'` : ``
   }`;
   return `
       SELECT * FROM ORDERS O

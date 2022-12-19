@@ -1,7 +1,7 @@
 :root {
   --purpleMain: #c991c0;
   --purpleDark: #95487c;
-  --purpleLight: #b38daf;
+  --purpleLight: #f6dbf3;
   --purpleExtraDark: #3c1f47;
   --grey: #e9e3e2;
   --white: #fff;
@@ -16,7 +16,7 @@ body {
 }
 
 .container {
-  width: 80%;
+  width: 700px;
   margin: 16px auto;
   background-color: var(--white);
   padding: 0 16px 16px;
